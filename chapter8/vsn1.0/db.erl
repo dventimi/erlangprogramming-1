@@ -15,10 +15,10 @@ new()                -> dict:new().
 write(Key, Data, Db) -> dict:store(Key, Data, Db).
 
 read(Key, Db) ->
-  case dict:fetch(Key, Db) of
-    error      -> {error, instance};
-    {ok, Data} -> {ok, Data}
-  end.
+    case dict:fetch(Key, Db) of
+	error      -> {error, instance};
+	{ok, Data} -> {ok, Data}
+    end.
 
 delete(Key, Db) -> dict:erase(Key, Db).
 

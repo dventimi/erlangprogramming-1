@@ -9,15 +9,16 @@
 -module(hof1).
 
 -export([double/1,double2/1,double3/1,rev/1,map/2,reverse/1,evens/1,palins/1,filter/2,
-         addTwo/0,showList/1,doAll/2,times/1,sendTo/1,palin/1]).
+         addTwo/0,showList/1,doAll/2,times/1,sendTo/1,palin/1,palins2/1]).
+-export([myHead/0]).
 
 double([]) ->
-      [];
+    [];
 double([X|Xs]) ->
-     [X*2 | double(Xs)].
+    [X*2 | double(Xs)].
 
 double2(Xs) ->
-     map(fun(X) -> X*2 end, Xs).
+    map(fun(X) -> X*2 end, Xs).
 
 rev([]) ->
     [];
@@ -32,7 +33,7 @@ reverse([],Zs) ->
 reverse([X|Xs],Zs) ->
     reverse(Xs,[X|Zs]).
 
-map(F,[]) ->
+map(_F,[]) ->
     [];
 map(F,[X|Xs]) ->
     [ F(X) | map(F,Xs) ].
@@ -49,22 +50,22 @@ evens([X|Xs]) ->
     end.
 
 palin(X) ->
-   X == reverse(X).
+    X == reverse(X).
 
 palins([]) -> 
-     [];
+    [];
 palins([X|Xs]) ->
-     case palin(X) of
+    case palin(X) of
  	true ->
  	    [X| palins(Xs)];
  	_ ->
  	    palins(Xs)
-     end.
+    end.
 
 palins2(Xs) ->
     filter( fun(X) -> X == reverse(X) end, Xs).
 
-filter(P,[]) -> 
+filter(_P,[]) -> 
     [];
 filter(P,[X|Xs]) ->
     case P(X) of
@@ -78,12 +79,12 @@ addTwo() ->
     fun (X,Y) ->
 	    X+Y end.
 
-myHead () ->
+myHead() ->
     fun ( [], Y ) ->
-		 Y;
-	( [X|_], Y ) ->
-		  X
-     end.
+	    Y;
+	( [X|_], _Y ) ->
+	    X
+    end.
 
 showList([]) ->
     ok;
@@ -92,7 +93,7 @@ showList([X|Xs]) ->
     showList(Xs).
 
 
-doAll(F,[]) ->
+doAll(_F,[]) ->
     ok;
 doAll(F,[X|Xs]) ->
     F(X),
@@ -100,12 +101,12 @@ doAll(F,[X|Xs]) ->
 
 times(X) ->
     fun (Y) ->
-	     X*Y end.
+	    X*Y end.
 
 double3(Xs) ->
     map(times(2),Xs).
 
 sendTo(Pid) ->
     fun (X) ->
-	     Pid ! X 
+	    Pid ! X 
     end.
