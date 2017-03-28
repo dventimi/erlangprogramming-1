@@ -15,14 +15,14 @@
          lookup_id/1, lookup_msisdn/1, restore_backup/0, delete_disabled/0]).
 
 create_tables(FileName) ->
-  ets:new(usrRam, [named_table, {keypos, #usr.msisdn}]),
-  ets:new(usrIndex, [named_table]),
-  dets:open_file(usrDisk, [{file, FileName}, {keypos, #usr.msisdn}]).
+    ets:new(usrRam, [named_table, {keypos, #usr.msisdn}]),
+    ets:new(usrIndex, [named_table]),
+    dets:open_file(usrDisk, [{file, FileName}, {keypos, #usr.msisdn}]).
 
 close_tables() ->
-  ets:delete(usrRam),
-  ets:delete(usrIndex),
-  dets:close(usrDisk).
+    ets:delete(usrRam),
+    ets:delete(usrIndex),
+    dets:close(usrDisk).
 
 add_usr(#usr{msisdn=PhoneNo, id=CustId} = Usr) ->
     ets:insert(usrIndex, {CustId, PhoneNo}),
@@ -35,8 +35,8 @@ update_usr(Usr) ->
 
 lookup_id(CustId) ->
     case get_index(CustId) of
-      {ok,PhoneNo}      -> lookup_msisdn(PhoneNo);
-      {error, instance} -> {error, instance}
+	{ok,PhoneNo}      -> lookup_msisdn(PhoneNo);
+	{error, instance} -> {error, instance}
     end.
 
 %% NB this code omitted from the description in Chapter 10.
@@ -66,21 +66,21 @@ delete_usr(PhoneNo, CustId) ->
 
 lookup_msisdn(PhoneNo) ->
     case ets:lookup(usrRam, PhoneNo) of
-      [Usr] -> {ok, Usr};
-      []    -> {error, instance}
+	[Usr] -> {ok, Usr};
+	[]    -> {error, instance}
     end.
 
 get_index(CustId) ->
     case ets:lookup(usrIndex, CustId) of
-      [{CustId,PhoneNo}] -> {ok, PhoneNo};
-      []                 -> {error, instance}
+	[{CustId,PhoneNo}] -> {ok, PhoneNo};
+	[]                 -> {error, instance}
     end.
 
 restore_backup() ->
     Insert = fun(#usr{msisdn=PhoneNo, id=Id} = Usr) ->
-               ets:insert(usrRam, Usr),
-               ets:insert(usrIndex, {Id, PhoneNo}),
-               continue
+		     ets:insert(usrRam, Usr),
+		     ets:insert(usrIndex, {Id, PhoneNo}),
+		     continue
              end,
     dets:traverse(usrDisk, Insert).
 
@@ -94,9 +94,9 @@ loop_delete_disabled('$end_of_table') ->
     ok;
 loop_delete_disabled(PhoneNo) ->
     case ets:lookup(usrRam, PhoneNo) of
-      [#usr{status=disabled, id = CustId}] ->
-        delete_usr(PhoneNo, CustId);
-      _ ->
-        ok
+	[#usr{status=disabled, id = CustId}] ->
+	    delete_usr(PhoneNo, CustId);
+	_ ->
+	    ok
     end,
     loop_delete_disabled(ets:next(usrRam, PhoneNo)).
