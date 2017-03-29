@@ -16,35 +16,35 @@
 % To calculate the area of a shape (section 2.12)
 
 area({square, Side}) ->
-  Side * Side ;
+    Side * Side ;
 area({circle, Radius}) ->
-  math:pi() * Radius * Radius;
+    math:pi() * Radius * Radius;
 area({triangle, A, B, C}) ->
-  S = (A + B + C)/2,
-  math:sqrt(S*(S-A)*(S-B)*(S-C));
-area(Other) ->
-  {error, invalid_object}.
+    S = (A + B + C)/2,
+    math:sqrt(S*(S-A)*(S-B)*(S-C));
+area(_Other) ->
+    {error, invalid_object}.
 
 % Variant of area using the  sqrt/1 imported from the math module.
 
 area2({square, Side}) ->
-  Side * Side ;
+    Side * Side ;
 area2({circle, Radius}) ->
-  math:pi() * Radius * Radius;
+    math:pi() * Radius * Radius;
 area2({triangle, A, B, C}) ->
-  S = (A + B + C)/2,
-  sqrt(S*(S-A)*(S-B)*(S-C));
-area2(Other) ->
-  {error, invalid_object}.
+    S = (A + B + C)/2,
+    sqrt(S*(S-A)*(S-B)*(S-C));
+area2(_Other) ->
+    {error, invalid_object}.
 
 % To flatten a 3D object into a 2D object.
 
-flatten(Other)  -> {error, unknown_shape};
 flatten(cube)   -> square;
-flatten(sphere) -> circle.
+flatten(sphere) -> circle;
+flatten(_Other)  -> {error, unknown_shape}.
 
 % The factorial function.
 
 factorial(0) -> 1;
 factorial(N) ->
-  N * factorial(N-1).
+    N * factorial(N-1).
