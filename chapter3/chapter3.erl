@@ -33,16 +33,16 @@
 % To convert an atom representing a day into an integer.
 
 convert(Day) ->
-  case Day of
-    monday    -> 1;
-    tuesday   -> 2;
-    wednesday -> 3;
-    thursday  -> 4;
-    friday    -> 5;
-    saturday  -> 6;
-    sunday    -> 7;
-    Other     -> {error, unknown_day}
-  end.
+    case Day of
+	monday    -> 1;
+	tuesday   -> 2;
+	wednesday -> 3;
+	thursday  -> 4;
+	friday    -> 5;
+	saturday  -> 6;
+	sunday    -> 7;
+	_Other    -> {error, unknown_day}
+    end.
 
 % Calculating the length of a list.
 
@@ -52,10 +52,10 @@ listlen([_|Xs]) -> 1 + listlen(Xs).
 % Rewrite this directly using a case expression:
 
 listlen2(Y) ->
-  case Y of
-    []     -> 0;
-    [_|Xs] -> 1 + listlen2(Xs)
-  end.
+    case Y of
+	[]     -> 0;
+	[_|Xs] -> 1 + listlen2(Xs)
+    end.
 
 % Indexing into a list, i.e. looking for the nth element of a  
 % list (with numbering from zero).
@@ -66,27 +66,27 @@ index(N,[_|Xs]) when N>0 -> index(N-1,Xs).
 % Defining an index function using a case expression.
 
 index2(X,Y) ->
-   index({X,Y}).
+    index({X,Y}).
 
 index(Z) ->
-  case Z of
-    {0,[X|_]}            -> X;
-    {N,[_|Xs]} when N>0  -> index2(N-1,Xs)
-  end.
+    case Z of
+	{0,[X|_]}            -> X;
+	{N,[_|Xs]} when N>0  -> index2(N-1,Xs)
+    end.
 
 % Defining an index function using nested case expressions.
 
 index3(X,Y) ->
-  case X of
-    0 ->
-      case Y of
-        [Z|_]    -> Z
-      end;
-    N when N>0 ->
-      case Y of
-        [_|Zs]   -> index3(N-1,Zs)
-      end
-  end.
+    case X of
+	0 ->
+	    case Y of
+		[Z|_]    -> Z
+	    end;
+	N when N>0 ->
+	    case Y of
+		[_|Zs]   -> index3(N-1,Zs)
+	    end
+    end.
 
 % Examples to illustrate the scope of variables.
 
@@ -100,39 +100,39 @@ g([])     -> 0.
 % possible ...
 
 safe(X) ->                
-  case X of                  
-    one -> Y = 12;               
-    _   -> Y = 196               
-  end,                         
-  X+Y.                        
+    case X of                  
+	one -> Y = 12;               
+	_   -> Y = 196               
+    end,                         
+    X+Y.                        
 
 % ... but the preferred style is to assign a value to the variable.
 % where the value is defined using a case
 
 preferred(X) ->
-  Y = case X of
-        one -> 12;
-        _   -> 196
-      end,       
-  X+Y.           
+    Y = case X of
+	    one -> 12;
+	    _   -> 196
+	end,       
+    X+Y.           
 
 %% Guards 
 
 % Defining factorial using a guard
 
 factorial(N) when N > 0 ->
-  N * factorial(N - 1);
+    N * factorial(N - 1);
 factorial(0) -> 1.
 
 % An example of a complex guard ...
 
 guard(X,Y) when not(((X>Y) or not(is_atom(X)) ) and (is_atom(Y) or (X==3.4))) ->
-  X+Y.
+    X+Y.
 
 % ... and the same guard rewritten using ; and ,
 
 guard2(X,Y) when not(X>Y) , is_atom(X) ; not(is_atom(Y)) , X=/=3.4 ->
-  X+Y.
+    X+Y.
 
 % Examples from the examples.erl module.
 
@@ -191,51 +191,51 @@ reverse_acc([H | T], Acc) -> reverse_acc(T, [H | Acc]).
 % Merging the elements of two lists.
 
 merge(Xs,Ys) ->
- lists:reverse(mergeL(Xs,Ys,[])).
+    lists:reverse(mergeL(Xs,Ys,[])).
 
 mergeL([X|Xs],Ys,Zs) ->
-  mergeR(Xs,Ys,[X|Zs]);
+    mergeR(Xs,Ys,[X|Zs]);
 mergeL([],[],Zs) ->
-  Zs.
+    Zs.
 
 mergeR(Xs,[Y|Ys],Zs) ->
-  mergeL(Xs,Ys,[Y|Zs]);
+    mergeL(Xs,Ys,[Y|Zs]);
 mergeR([],[],Zs) ->
-  Zs.
+    Zs.
 
 % Average revisited, this time using two accumulators.
 
 average2(List) -> average_acc(List, 0,0).
 
 average_acc([], Sum, Length) ->
-  Sum / Length;
+    Sum / Length;
 average_acc([H | T], Sum, Length) ->
-  average_acc(T, Sum + H, Length + 1).
+    average_acc(T, Sum + H, Length + 1).
 
 % Iterative version of sum
 
 sum3(Boundary) -> sum_acc(1, Boundary, 0).
 
 sum_acc(Index, Boundary, Sum) when Index =< Boundary ->
-  sum_acc(Index + 1, Boundary, Sum + Index);
+    sum_acc(Index + 1, Boundary, Sum + Index);
 sum_acc(_I, _B, Sum)->
-   Sum.
+    Sum.
 
 %% Runtime Errors
 
 % Fault-provoking functions.
 
 test1(N) ->
-  case N of
-    -1 -> false;
-    1  -> true
-  end.
+    case N of
+	-1 -> false;
+	1  -> true
+    end.
 
 test2(N) ->
-  if
-    N < 0 -> false;
-    N > 0 -> true
-  end.
+    if
+	N < 0 -> false;
+	N > 0 -> true
+    end.
 
 % 
 
@@ -244,51 +244,51 @@ test2(N) ->
 % Examples showing different kinds of error behaviour.
 
 try_return(X) when is_integer(X) -> 
-  try return_error(X) of 
-    Val -> {normal, Val} 
-  catch 
-    exit:Reason -> {exit, Reason}; 
-    throw:Throw -> {throw, Throw}; 
-    error:Error -> {error, Error} 
-  end. 
+    try return_error(X) of 
+	Val -> {normal, Val} 
+    catch 
+	exit:Reason -> {exit, Reason}; 
+	throw:Throw -> {throw, Throw}; 
+	error:Error -> {error, Error} 
+    end. 
 
 try_wildcard(X) when is_integer(X) ->
-  try return_error(X)
+    try return_error(X)
     catch
-    throw:Throw -> {throw, Throw};
-    error:_     -> error;
-    Type:Error  -> {Type, Error};
-    _           -> other;                 %% Will never be returned
-    _:_         -> other                  %% Will never be returned
-  end.
+	throw:Throw -> {throw, Throw};
+	error:_     -> error;
+	Type:Error  -> {Type, Error};
+	_           -> other;                 %% Will never be returned
+	_:_         -> other                  %% Will never be returned
+    end.
 
 try_return2(X) when is_integer(X) ->
-  try return_error(X) of
-    Val -> {normal, Val}
+    try return_error(X) of
+	Val -> {normal, Val}
     catch
-    exit:_  -> 34;
-    throw:_ -> 99;
-    error:_ -> 678
-  end.
+	exit:_  -> 34;
+	throw:_ -> 99;
+	error:_ -> 678
+    end.
 
 return_error(X) when X < 0 ->
-  throw({'EXIT', {badarith,
-                 [{exception,return_error,1},
-                  {erl_eval,do_apply,5},
-                  {shell,exprs,6},
-                  {shell,eval_exprs,6},
-                  {shell,eval_loop,3}]}});
+    throw({'EXIT', {badarith,
+		    [{exception,return_error,1},
+		     {erl_eval,do_apply,5},
+		     {shell,exprs,6},
+		     {shell,eval_exprs,6},
+		     {shell,eval_loop,3}]}});
 return_error(X) when X == 0 ->
-  1/X;
+    1/X;
 return_error(X) when X > 0->
-  {'EXIT', {badarith, [{exception,return_error,1},
-                       {erl_eval,do_apply,5},
-                       {shell,exprs,6},
-                       {shell,eval_exprs,6},
-                       {shell,eval_loop,3}]}}.
+    {'EXIT', {badarith, [{exception,return_error,1},
+			 {erl_eval,do_apply,5},
+			 {shell,exprs,6},
+			 {shell,eval_exprs,6},
+			 {shell,eval_loop,3}]}}.
 
 return(X) when is_integer(X) ->
-  catch return_error(X).
+    catch return_error(X).
 
 %% Exercise 3-10: sample text
 
